@@ -2034,8 +2034,8 @@ __load_completion()
     done
     IFS=$OIFS
 
-    if [[ $BASH_SOURCE == */* ]]; then
-        dirs+=( "${BASH_SOURCE%/*}/completions" )
+    if [[ ${BASH_SOURCE[0]} == */* ]]; then
+        dirs+=( "${BASH_SOURCE[0]%/*}/completions" )
     else
         dirs+=( ./completions )
     fi
