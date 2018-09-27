@@ -380,7 +380,7 @@ _get_comp_words_by_ref()
             prev)  vprev=prev ;;
             cword) vcword=cword ;;
             words) vwords=words ;;
-            *) echo "bash: $FUNCNAME(): \`${!OPTIND}': unknown argument" \
+            *) echo "bash: ${FUNCNAME[0]}(): \`${!OPTIND}': unknown argument" \
                 1>&2; return 1
         esac
         let "OPTIND += 1"
@@ -1448,7 +1448,7 @@ _known_hosts()
 # them recursively adding each result to the config variable
 _included_ssh_config_files()
 {
-    [[ $# -lt 1 ]] && echo "error: $FUNCNAME: missing mandatory argument CONFIG"
+    [[ $# -lt 1 ]] && echo "error: ${FUNCNAME[0]}: missing mandatory argument CONFIG"
     local configfile i f
     configfile=$1
     local included=$( command sed -ne 's/^[[:blank:]]*[Ii][Nn][Cc][Ll][Uu][Dd][Ee][[:blank:]]\{1,\}\([^#%]*\)\(#.*\)\{0,1\}$/\1/p' "${configfile}" )
@@ -1509,9 +1509,9 @@ _known_hosts_real()
             6) ipv6=1 ;;
         esac
     done
-    [[ $# -lt $OPTIND ]] && echo "error: $FUNCNAME: missing mandatory argument CWORD"
+    [[ $# -lt $OPTIND ]] && echo "error: ${FUNCNAME[0]}: missing mandatory argument CWORD"
     cur=${!OPTIND}; let "OPTIND += 1"
-    [[ $# -ge $OPTIND ]] && echo "error: $FUNCNAME("$@"): unprocessed arguments:"\
+    [[ $# -ge $OPTIND ]] && echo "error: ${FUNCNAME[0]}("$@"): unprocessed arguments:"\
     $(while [[ $# -ge $OPTIND ]]; do printf '%s\n' ${!OPTIND}; shift; done)
 
     [[ $cur == *@* ]] && user=${cur%@*}@ && cur=${cur#*@}
