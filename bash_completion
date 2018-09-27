@@ -1895,13 +1895,13 @@ complete -F _longopt a2ps awk base64 bash bc bison cat chroot colordiff cp \
     sed seq sha{,1,224,256,384,512}sum shar sort split strip sum tac tail tee \
     texindex touch tr uname unexpand uniq units vdir wc who
 
-# declare only knows -g in bash >= 4.2.
-if [[ ${BASH_VERSINFO[0]} -gt 4 ||
-      ${BASH_VERSINFO[0]} -eq 4 && ${BASH_VERSINFO[1]} -ge 2 ]]; then
-    declare -Ag _xspecs
-else
+# Associative arrays are local by default, but we want _xspecs to be global
+# when possible.  But declare -g only works in bash >= 4.2.  To test for it,
+# use feature detection with 'eval' rather than version detection.
+if ! eval 'declare -Ag _xspecs'; then
     declare -A _xspecs
 fi
+
 _filedir_xspec()
 {
     local cur prev words cword
