@@ -383,7 +383,7 @@ _get_comp_words_by_ref()
             *) echo "bash: ${FUNCNAME[0]}(): \`${!OPTIND}': unknown argument" \
                 1>&2; return 1
         esac
-        let "OPTIND += 1"
+        (( OPTIND += 1 ))
     done
 
     __get_cword_at_cursor_by_ref "$exclude" words cword cur
@@ -1510,7 +1510,7 @@ _known_hosts_real()
         esac
     done
     [[ $# -lt $OPTIND ]] && echo "error: ${FUNCNAME[0]}: missing mandatory argument CWORD"
-    cur=${!OPTIND}; let "OPTIND += 1"
+    cur=${!OPTIND}; (( OPTIND += 1 ))
     [[ $# -ge $OPTIND ]] && echo "error: ${FUNCNAME[0]}("$@"): unprocessed arguments:"\
     $(while [[ $# -ge $OPTIND ]]; do printf '%s\n' ${!OPTIND}; shift; done)
 
