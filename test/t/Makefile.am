@@ -24,6 +24,7 @@ EXTRA_DIST = \
 	test_aptitude.py \
 	test_arch.py \
 	test_arping.py \
+	test_arp.py \
 	test_arpspoof.py \
 	test_asciidoc.py \
 	test_aspell.py \
@@ -50,6 +51,7 @@ EXTRA_DIST = \
 	test_bts.py \
 	test_bzip2.py \
 	test_cal.py \
+	test_cancel.py \
 	test_cardctl.py \
 	test_cat.py \
 	test_ccache.py \
@@ -186,6 +188,7 @@ EXTRA_DIST = \
 	test_gnatmake.py \
 	test_gnokii.py \
 	test_gnome_mplayer.py \
+	test_gnome_screenshot.py \
 	test_gpasswd.py \
 	test_gpc.py \
 	test_gperf.py \
@@ -217,6 +220,7 @@ EXTRA_DIST = \
 	test_hping3.py \
 	test_htop.py \
 	test_htpasswd.py \
+	test_hunspell.py \
 	test_hwclock.py \
 	test_iconv.py \
 	test_identify.py \
@@ -295,6 +299,7 @@ EXTRA_DIST = \
 	test_list_members.py \
 	test_list_owners.py \
 	test_ln.py \
+	test_locale_gen.py \
 	test_look.py \
 	test_lpq.py \
 	test_lpr.py \
@@ -370,6 +375,7 @@ EXTRA_DIST = \
 	test_muttng.py \
 	test_mutt.py \
 	test_mv.py \
+	test_mypy.py \
 	test_mysqladmin.py \
 	test_mysql.py \
 	test_ncftp.py \
@@ -391,6 +397,7 @@ EXTRA_DIST = \
 	test_objdump.py \
 	test_od.py \
 	test_oggdec.py \
+	test_op.py \
 	test_openssl.py \
 	test_opera.py \
 	test_optipng.py \
@@ -400,6 +407,7 @@ EXTRA_DIST = \
 	test_paste.py \
 	test_patch.py \
 	test_pdftotext.py \
+	test_perlcritic.py \
 	test_perldoc.py \
 	test_perl.py \
 	test_perltidy.py \
@@ -424,6 +432,7 @@ EXTRA_DIST = \
 	test_pm_is_supported.py \
 	test_pm_powersave.py \
 	test_pngfix.py \
+	test_portinstall.py \
 	test_portsnap.py \
 	test_portupgrade.py \
 	test_postcat.py \
@@ -453,6 +462,7 @@ EXTRA_DIST = \
 	test_pwgen.py \
 	test_pycodestyle.py \
 	test_pydoc.py \
+	test_pydocstyle.py \
 	test_pyflakes.py \
 	test_pylint_3.py \
 	test_pylint.py \
