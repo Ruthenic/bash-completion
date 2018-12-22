@@ -327,8 +327,7 @@ __get_cword_at_cursor_by_ref()
         [[ $index -lt 0 ]] && index=0
     fi
 
-    # TODO: Restore original without eval?
-    eval "local $2 $3 $4" && _upvars -a${#words[@]} $2 "${words[@]}" \
+    local "$2" "$3" "$4" && _upvars -a${#words[@]} $2 "${words[@]}" \
         -v $3 "$cword" -v $4 "${cur:0:$index}"
 }
 
@@ -396,8 +395,7 @@ _get_comp_words_by_ref()
     [[ $vwords ]] && { upvars+=("$vwords"); upargs+=(-a${#words[@]} $vwords
         "${words[@]}"); }
 
-    # TODO: Restore original without eval?
-    (( ${#upvars[@]} )) && eval "local ${upvars[@]}" && _upvars "${upargs[@]}"
+    (( ${#upvars[@]} )) && local "${upvars[@]}" && _upvars "${upargs[@]}"
 }
 
 
