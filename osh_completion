@@ -318,6 +318,10 @@ _quote_readline_by_ref()
 #            completions with `.$1' and the uppercase version of it as file
 #            extension.
 #
+
+# TODO: Remove this bash version after more testing
+if test -n "$BASH_VERSION"; then
+
 _filedir()
 {
     local IFS=$'\n'
@@ -356,6 +360,32 @@ _filedir()
         COMPREPLY+=( "${toks[@]}" )
     fi
 } # _filedir()
+
+else 
+
+# This is the OSH port, with quoting logic and tilde removed.  We handle that in OSH.
+_filedir()
+{
+    local IFS=$'\n'
+
+    local -a toks
+    toks=( $( compgen -d -- "$cur" ) )
+
+    if [[ "$1" != -d ]]; then
+        # Munge xspec to contain uppercase version too
+        # http://thread.gmane.org/gmane.comp.shells.bash.bugs/15294/focus=15306
+        local xspec=${1:+"!*.@($1|${1^^})"}
+        toks+=( $( compgen -f -X "$xspec" -- "$cur" ) )
+    fi
+
+    if [[ ${#toks[@]} -ne 0 ]]; then
+        # 2>/dev/null for direct invocation, e.g. in the _filedir unit test
+        compopt -o filenames 2>/dev/null
+        COMPREPLY+=( "${toks[@]}" )
+    fi
+} # osh _filedir() port
+
+fi
 
 
 # Helper function for _parse_help and _parse_usage.
