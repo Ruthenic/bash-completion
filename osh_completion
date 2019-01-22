@@ -158,8 +158,10 @@ __reassemble_comp_words_by_ref() {
 
 # OSH: Rewritten with compadjust!
 _get_comp_words_by_ref() {
-  # Only called with 'cur'
-  compadjust "$1"
+  # NOTE: Only called with 'cur' in this file, but git-completion.bash needs
+  # more.  It redefines _get_comp_words_by_ref in a compatible way if it's not
+  # already defined.
+  compadjust "$@"
 }
 
 
@@ -364,6 +366,9 @@ _filedir()
 else 
 
 # This is the OSH port, with quoting logic and tilde removed.  We handle that in OSH.
+
+# TODO: restore shopt IFS=$'\n' ?  Or provide a different idiom.
+# This is for the ( $(compgen ) ) expansion.
 _filedir()
 {
     local IFS=$'\n'
