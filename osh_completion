@@ -1693,8 +1693,11 @@ __load_completion()
         [[ -d "$dir" ]] || continue
         for compfile in "$cmd" "$cmd.bash" "_$cmd"; do
             compfile="$dir/$compfile"
+            # OSH patch: don't swallow stdout/stderr.  Otherwise we lose parse
+            # errors (e.g. wget uses ;;&)
+
             # Avoid trying to source dirs; https://bugzilla.redhat.com/903540
-            [[ -f "$compfile" ]] && . "$compfile" &>/dev/null && return 0
+            [[ -f "$compfile" ]] && . "$compfile" && return 0
         done
     done
 
