@@ -1520,7 +1520,7 @@ _filedir_xspec()
     local -a toks
 
     toks=( $(
-        compgen -d -- "$(quote_readline "$cur")" | {
+        compgen -d -- "$cur" | {
         while read -r tmp; do
             printf '%s\n' $tmp
         done
@@ -1538,7 +1538,7 @@ _filedir_xspec()
     xspec="$matchop($xspec|${xspec^^})"
 
     toks+=( $(
-        eval compgen -f -X "'!$xspec'" -- "\$(quote_readline "\$cur")" | {
+        eval compgen -f -X "'!$xspec'" -- '$cur' | {
         while read -r tmp; do
             [[ -n $tmp ]] && printf '%s\n' $tmp
         done
@@ -1548,7 +1548,7 @@ _filedir_xspec()
     # Try without filter if it failed to produce anything and configured to
     [[ -n ${COMP_FILEDIR_FALLBACK:-} && ${#toks[@]} -lt 1 ]] && {
         local reset=$(shopt -po noglob); set -o noglob
-        toks+=( $( compgen -f -- "$(quote_readline "$cur")" ) )
+        toks+=( $( compgen -f -- "$cur" ) )
         IFS=' '; $reset; IFS=$'\n'
     }
 
