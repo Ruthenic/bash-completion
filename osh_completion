@@ -1486,7 +1486,7 @@ _longopt()
         COMPREPLY=( $( compgen -W "$( LC_ALL=C $1 --help 2>&1 | \
             command sed -ne 's/.*\(--[-A-Za-z0-9]\{1,\}=\{0,1\}\).*/\1/p' | sort -u )" \
             -- "$cur" ) )
-        [[ $COMPREPLY == *= ]] && compopt -o nospace
+        [[ ${COMPREPLY[0]} == *= ]] && compopt -o nospace
     elif [[ "$1" == @(rmdir|chroot) ]]; then
         _filedir -d
     else
