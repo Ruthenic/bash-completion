@@ -2,8 +2,6 @@ import pytest
 
 
 class TestUniq:
-
-    @pytest.mark.complete("uniq --",
-                          skipif="! uniq --help &>/dev/null")
+    @pytest.mark.complete("uniq --", require_longopt=True)
     def test_1(self, completion):
-        assert completion.list
+        assert completion

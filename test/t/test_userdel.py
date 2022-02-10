@@ -2,11 +2,10 @@ import pytest
 
 
 class TestUserdel:
-
-    @pytest.mark.complete("userdel -")
+    @pytest.mark.complete("userdel -", require_cmd=True)
     def test_1(self, completion):
-        assert completion.list
+        assert completion
 
-    @pytest.mark.complete("userdel root")
+    @pytest.mark.complete("userdel roo")
     def test_2(self, completion):
-        assert "root" in completion.list
+        assert completion == "t" or "root" in completion

@@ -1,7 +1,0 @@
-log/
-tmp/
-dbg.log
-xtrace.log
-site.exp
-site.bak
-pytestdebug.log

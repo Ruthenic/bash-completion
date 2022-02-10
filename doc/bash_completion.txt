@@ -1,8 +1,6 @@
-Bash completion
-===============
+= Bash completion
 
-Configuration files
--------------------
+== Configuration files
 
 *$BASH_COMPLETION_USER_FILE*::
     Sourced late by bash_completion, pretty much after everything else.
@@ -16,8 +14,7 @@ Configuration files
     below.  If `$XDG_CONFIG_HOME` is unset or null, `~/.config` is
     used instead of it.
 
-Environment variables
----------------------
+== Environment variables
 
 *BASH_COMPLETION_COMPAT_DIR*::
     Directory for pre-dynamic loading era (pre-2.0) backwards compatibility
@@ -60,7 +57,9 @@ Environment variables
     Default is unset.
 
 *COMP_TAR_INTERNAL_PATHS*::
-    If set and not null *before* sourcing bash_completion, `tar` completion
-    will do correct path completion for tar file contents.  If unset or null,
-    `tar' completion will do correct completion for paths to tar files.  See
-    also README.
+    If set and not null *before sourcing* the `tar` completion, it will do
+    correct path completion for tar file _contents_.  If unset or null,
+    _paths to_ tar files will be correctly completed. Unfortunately we do not
+    have a way to make both Just Work properly at the moment.  We consider it
+    more important to have proper completion of paths to tar files than it is
+    to have completion for their contents, so the default is unset.

@@ -2,7 +2,10 @@ import pytest
 
 
 class TestLd:
-
     @pytest.mark.complete("ld ")
     def test_1(self, completion):
-        assert completion.list
+        assert completion
+
+    @pytest.mark.complete("ld -", require_longopt=True)
+    def test_options(self, completion):
+        assert completion

@@ -2,7 +2,10 @@ import pytest
 
 
 class TestCsplit:
-
     @pytest.mark.complete("csplit ")
     def test_1(self, completion):
-        assert completion.list
+        assert completion
+
+    @pytest.mark.complete("csplit -", require_longopt=True)
+    def test_options(self, completion):
+        assert completion

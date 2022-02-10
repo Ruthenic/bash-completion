@@ -1,20 +1,21 @@
-#!/bin/bash
+#!/bin/bash -u
 
 gitgrep()
 {
-    local out=$(git grep -I -P -n "$1" | \
-        grep -E '^(bash_completion|completions/|test/)' | \
-        grep -Fv 'test/runLint')
-    if [ -n "$out" ] ; then
+    local out=$(git grep -I -P -n "$1" |
+        grep -E '^(bash_completion|completions/|test/)' |
+        grep -Ev "^test/runLint\>${filter_out:+|$filter_out}")
+    if [ -n "$out" ]; then
         printf '***** %s\n' "$2"
         printf '%s\n\n' "$out"
     fi
 }
 
-unset CDPATH
-cd $(dirname "$0") ; cd ..
+unset -v CDPATH
+cd $(dirname "$0")/..
 
-cmdstart='(^|[[:space:]]|\()'
+cmdstart='(^|[[:space:];&|]|\()'
+filter_out=
 
 gitgrep $cmdstart"awk\b.*-F([[:space:]]|[[:space:]]*[\"'][^\"']{2,})" \
     'awk with -F char or -F ERE, use -Fchar instead (Solaris)'
@@ -32,7 +33,7 @@ gitgrep $cmdstart'sed\b.*\\\|' \
 #gitgrep $cmdstart'sed\b.*;' \
 #    'sed with ;, use multiple -e options instead (POSIX?) (false positives?)'
 
-gitgrep $cmdstart'sed\b.*-[^[:space:]]*[rE]' \
+gitgrep $cmdstart'sed\b.*[[:space:]]-[^[:space:]]*[rE]' \
     'sed with -r or -E, drop and use POSIX BRE instead'
 
 gitgrep $cmdstart'[ef]grep\b' \
@@ -41,5 +42,12 @@ gitgrep $cmdstart'[ef]grep\b' \
 # TODO: $ in sed subexpression used as an anchor (POSIX BRE optional, not in
 #       Solaris/FreeBSD)
 
-gitgrep '(?<!command)'$cmdstart'(grep|ls|sed)(\s|$)' \
-    'invoke grep, ls, and sed through "command", e.g. "command grep"'
+gitgrep '(?<!command)'$cmdstart'(grep|ls|sed|cd)(\s|$)' \
+    'invoke grep, ls, sed, and cd through "command", e.g. "command grep"'
+
+gitgrep '<<<' 'herestrings use temp files, use some other way'
+
+filter_out='^(test/|bash_completion\.sh)' gitgrep ' \[ ' \
+    'use [[ ]] instead of [ ]'
+
+gitgrep $cmdstart'unset [^-]' 'Explicitly specify "unset -v/-f"'

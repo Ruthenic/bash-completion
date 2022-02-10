@@ -1,22 +1,16 @@
 import pytest
 
 
-@pytest.mark.bashcomp(
-    pre_cmds=(
-        "export RI='-d ri'",
-    ),
-)
+@pytest.mark.bashcomp(pre_cmds=("export RI='-d ri'",))
 class TestRi:
-
-    @pytest.mark.complete("ri -")
+    @pytest.mark.complete("ri -", require_cmd=True)
     def test_1(self, completion):
-        assert completion.list
+        assert completion
 
-    @pytest.mark.xfail  # TODO: completion split issues (single space)
     @pytest.mark.complete("ri --dump=ri/")
     def test_2(self, completion):
-        assert completion.list == "BashCompletion/ cache.ri".split()
+        assert completion == "BashCompletion/ cache.ri".split()
 
-    @pytest.mark.complete("ri BashCompletio")
+    @pytest.mark.complete("ri BashCompletio", require_cmd=True)
     def test_3(self, completion):
-        assert completion.list == ["BashCompletion"]
+        assert completion == "n"

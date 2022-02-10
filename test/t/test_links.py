@@ -2,11 +2,10 @@ import pytest
 
 
 class TestLinks:
-
     @pytest.mark.complete("links ")
     def test_1(self, completion):
-        assert completion.list
+        assert completion
 
-    @pytest.mark.complete("links -")
+    @pytest.mark.complete("links -", require_cmd=True)
     def test_2(self, completion):
-        assert completion.list
+        assert completion

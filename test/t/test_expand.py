@@ -2,8 +2,6 @@ import pytest
 
 
 class TestExpand:
-
-    @pytest.mark.complete("expand --",
-                          skipif="! expand --help &>/dev/null")
+    @pytest.mark.complete("expand --", require_longopt=True)
     def test_1(self, completion):
-        assert completion.list
+        assert completion

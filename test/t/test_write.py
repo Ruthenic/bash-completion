@@ -2,7 +2,6 @@ import pytest
 
 
 class TestWrite:
-
-    @pytest.mark.complete("write root")
+    @pytest.mark.complete("write roo")
     def test_1(self, completion):
-        assert "root" in completion.list
+        assert completion == "t" or "root" in completion

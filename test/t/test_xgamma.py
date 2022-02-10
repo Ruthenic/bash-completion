@@ -2,12 +2,11 @@ import pytest
 
 
 class TestXgamma:
-
-    @pytest.mark.complete("xgamma -")
+    @pytest.mark.complete("xgamma -", require_cmd=True)
     def test_1(self, completion):
-        assert completion.list
+        assert completion
 
-    @pytest.mark.complete("xgamma -gam")
+    @pytest.mark.complete("xgamma -gam", require_cmd=True)
     def test_2(self, completion):
-        assert completion.list == ["-gamma"]
-        assert completion.line.endswith(" ")
+        assert completion == "ma"
+        assert completion.endswith(" ")

@@ -8,12 +8,19 @@ _firefox()
     [[ $cur == -MOZ_LOG*=* ]] && prev=${cur%%=*} cur=${cur#*=}
 
     case $prev in
-        --help|--version|--display|--UILocale|-MOZ_LOG|--new-window|--new-tab|\
-        --private-window|--window-size|--search|--start-debugger-server|\
-        --recording|--debugger-args|-[hvPa])
+        --help | --version | --display | --UILocale | -MOZ_LOG | --new-window | --new-tab | \
+            --private-window | --window-size | --search | --start-debugger-server | \
+            --recording | --debugger-args | -[hva])
             return
             ;;
-        --profile|--screenshot)
+        -P)
+            COMPREPLY=($(compgen -W "$(
+                awk -F= '$1 == "Name" { print $2 }' \
+                    ~/.mozilla/firefox/profiles.ini 2>/dev/null
+            )" -- "$cur"))
+            return
+            ;;
+        --profile | --screenshot)
             _filedir -d
             return
             ;;
@@ -21,12 +28,12 @@ _firefox()
             _filedir log
             return
             ;;
-        --recording-file)
+        --recording-output | --recording-file)
             _filedir
             return
             ;;
-        --debugger|-d)
-            COMPREPLY=( $( compgen -c -- "$cur" ) )
+        --debugger | -d)
+            COMPREPLY=($(compgen -c -- "$cur"))
             return
             ;;
     esac
@@ -34,13 +41,13 @@ _firefox()
     $split && return
 
     if [[ $cur == -* ]]; then
-        COMPREPLY=( $( compgen -W '$( _parse_help "$1" )' -- "$cur" ) )
-        [[ $COMPREPLY == *= ]] && compopt -o nospace
+        COMPREPLY=($(compgen -W '$(_parse_help "$1")' -- "$cur"))
+        [[ ${COMPREPLY-} == *= ]] && compopt -o nospace
         return
     fi
 
-    _filedir "@(?([xs])htm?(l)|pdf)"
+    _filedir "@(?([xs])htm?(l)|pdf|txt)"
 } &&
-complete -F _firefox firefox mozilla-firefox iceweasel
+    complete -F _firefox firefox firefox-esr iceweasel mozilla-firefox
 
 # ex: filetype=sh

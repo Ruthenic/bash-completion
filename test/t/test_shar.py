@@ -2,7 +2,6 @@ import pytest
 
 
 class TestShar:
-
-    @pytest.mark.complete("shar --")
+    @pytest.mark.complete("shar --", require_cmd=True)
     def test_1(self, completion):
-        assert completion.list
+        assert completion

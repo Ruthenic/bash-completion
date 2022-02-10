@@ -6,7 +6,7 @@ _chmod()
     _init_completion -s || return
 
     case $prev in
-        --help|--version)
+        --help | --version)
             return
             ;;
         --reference)
@@ -17,22 +17,26 @@ _chmod()
 
     $split && return
 
-    if [[ $cur == -* ]]; then
-        local opts=$( _parse_help "$1" )
-        [[ $opts ]] || opts=$( _parse_usage "$1" )
-        COMPREPLY=( $( compgen -W "$opts" -- "$cur" ) )
-        [[ $COMPREPLY == *= ]] && compopt -o nospace
+    # Adapted from coreutils 8.28 chmod man page
+    local modearg="-@(@(+([rwxXst])|[ugo])|+([0-7]))"
+
+    # shellcheck disable=SC2053
+    if [[ $cur == -* && $cur != $modearg ]]; then
+        COMPREPLY=($(
+            compgen -W '$(_parse_help "$1" || _parse_usage "$1")' -- "$cur"
+        ))
+        [[ ${COMPREPLY-} == *= ]] && compopt -o nospace
         return
     fi
 
     local args
-    _count_args
+    _count_args "" "" "$modearg"
 
     case $args in
-        1) ;;  # mode
+        1) ;; # mode
         *) _filedir ;;
     esac
 } &&
-complete -F _chmod chmod
+    complete -F _chmod chmod
 
 # ex: filetype=sh

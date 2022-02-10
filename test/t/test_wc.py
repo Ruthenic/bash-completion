@@ -2,8 +2,6 @@ import pytest
 
 
 class TestWc:
-
-    @pytest.mark.complete("wc --",
-                          skipif="! wc --help &>/dev/null")
+    @pytest.mark.complete("wc --", require_longopt=True)
     def test_1(self, completion):
-        assert completion.list
+        assert completion

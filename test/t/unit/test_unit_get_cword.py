@@ -1,17 +1,22 @@
+import pexpect  # type: ignore[import]
 import pytest
 
-from conftest import assert_bash_exec, TestUnitBase
+from conftest import PS1, TestUnitBase, assert_bash_exec
 
 
-@pytest.mark.bashcomp(cmd=None,
-                      ignore_env=r"^[+-]COMP_(WORDS|CWORD|LINE|POINT)=")
+@pytest.mark.bashcomp(
+    cmd=None, ignore_env=r"^[+-](COMP_(WORDS|CWORD|LINE|POINT)|_scp_path_esc)="
+)
 class TestUnitGetCword(TestUnitBase):
-
     def _test(self, *args, **kwargs):
         return self._test_unit("_get_cword %s; echo", *args, **kwargs)
 
     def test_1(self, bash):
-        assert_bash_exec(bash, "_get_cword >/dev/null")
+        assert_bash_exec(
+            bash,
+            "COMP_WORDS=() COMP_CWORD= COMP_LINE= COMP_POINT= "
+            "_get_cword >/dev/null",
+        )
 
     def test_2(self, bash):
         """a b| should return b"""
@@ -44,18 +49,18 @@ class TestUnitGetCword(TestUnitBase):
         assert output == r"b\ c"
 
     def test_8(self, bash):
-        r"""a b\| c should return b\ """
+        r"""a b\| c should return b\ """  # fmt: skip
         output = self._test(bash, r"(a 'b\ c')", 1, r"a b\ c", 4)
         assert output == "b\\"
 
     def test_9(self, bash):
-        r"""a "b\| should return "b\ """
+        r"""a "b\| should return "b\ """  # fmt: skip
         output = self._test(bash, "(a '\"b\\')", 1, r"a \"b\\", 5)
         assert output == '"b\\'
 
     def test_10(self, bash):
         r"""a 'b c| should return 'b c"""
-        output = self._test(bash, "(a \"'b c\")", 1, "a 'b c", 6)
+        output = self._test(bash, '(a "\'b c")', 1, "a 'b c", 6)
         assert output == "'b c"
 
     def test_11(self, bash):
@@ -98,7 +103,7 @@ class TestUnitGetCword(TestUnitBase):
         a -n| should return -n
 
         This test makes sure `_get_cword' doesn't use `echo' to return its
-        value, because -n might be interpreted by `echo' and thus woud not
+        value, because -n might be interpreted by `echo' and thus would not
         be returned.
         """
         output = self._test(bash, "(a -n)", 1, "a -n", 4)
@@ -133,3 +138,17 @@ class TestUnitGetCword(TestUnitBase):
         """a 'b&c| should return 'b&c"""
         output = self._test(bash, '(a "\'b&c")', 1, "a 'b&c", 6)
         assert output == "'b&c"
+
+    @pytest.mark.xfail(reason="TODO: non-ASCII issues with test suite?")
+    def test_24(self, bash):
+        """Index shouldn't drop below 0"""
+        bash.send("scp ääää§ se\t\r\n")
+        got = bash.expect_exact(
+            [
+                "index: substring expression < 0",
+                PS1,
+                pexpect.EOF,
+                pexpect.TIMEOUT,
+            ]
+        )
+        assert got == 1

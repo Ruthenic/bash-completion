@@ -1,15 +1,13 @@
-import os
-
 import pytest
 
 
 class TestArp:
-
-    @pytest.mark.xfail(bool(os.environ.get("CI")),
-                       reason="Probably fails in CI")
+    @pytest.mark.complete(
+        "arp ", require_cmd=True, skipif='test -z "$(arp 2>/dev/null)"'
+    )
     def test_1(self, completion):
-        assert completion.list
+        assert completion
 
-    @pytest.mark.complete("arp -")
+    @pytest.mark.complete("arp -", require_cmd=True)
     def test_2(self, completion):
-        assert completion.list
+        assert completion
